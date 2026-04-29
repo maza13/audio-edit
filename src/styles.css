@@ -466,13 +466,69 @@ button:disabled, select:disabled { cursor: not-allowed; opacity: 0.45; }
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
+.sidebar-track-list {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .sidebar-track-card {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
-  padding: 10px 14px;
   border-bottom: 1px solid var(--line);
   gap: 8px;
+  transition: background 140ms, box-shadow 140ms, border-color 140ms;
+}
+
+.sidebar-track-card.is-selected {
+  background: linear-gradient(90deg, rgba(123, 97, 255, 0.18), rgba(123, 97, 255, 0.04));
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.sidebar-track-card.is-empty {
+  border-bottom-style: dashed;
+}
+
+.track-select-btn {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  padding: 10px 0 10px 14px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.track-select-btn:hover .track-name,
+.track-select-btn:focus-visible .track-name {
+  color: var(--accent-strong);
+}
+
+.track-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  width: 100%;
+}
+
+.track-index {
+  width: 26px;
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.track-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
 }
 
 .track-name {
@@ -485,10 +541,20 @@ button:disabled, select:disabled { cursor: not-allowed; opacity: 0.45; }
   white-space: nowrap;
 }
 
+.track-meta {
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .track-controls {
   display: flex;
+  align-items: center;
   gap: 4px;
   flex-shrink: 0;
+  padding: 8px 12px 8px 0;
 }
 
 .sidebar-clip-actions {
@@ -541,9 +607,14 @@ button:disabled, select:disabled { cursor: not-allowed; opacity: 0.45; }
   transition: background 140ms, color 140ms, border-color 140ms;
 }
 
-.track-ctrl-btn:hover {
+.track-ctrl-btn:hover:not(:disabled) {
   background: rgba(255,255,255,0.08);
   border-color: var(--line-strong);
+}
+
+.track-ctrl-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
 }
 
 .track-ctrl-btn.is-active {

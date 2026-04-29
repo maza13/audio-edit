@@ -1,4 +1,4 @@
-import { createApp } from "./app/App.js?v=20260429-ui-check7";
+import { createApp } from "./app/App.js?v=20260429-cycle1";
 
 const root = document.querySelector("#app");
 

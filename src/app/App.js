@@ -1,6 +1,6 @@
-import { decodeAudioFile } from "../audio/decodeAudioFile.js?v=20260429-soniq";
-import { decodeVideoFile } from "../audio/decodeVideoFile.js?v=20260429-soniq";
-import { createAudioPreviewUrl } from "../audio/createAudioPreviewUrl.js?v=20260429-soniq";
+import { decodeAudioFile } from "../audio/decodeAudioFile.js?v=20260429-cycle1";
+import { decodeVideoFile } from "../audio/decodeVideoFile.js?v=20260429-cycle1";
+import { createAudioPreviewUrl } from "../audio/createAudioPreviewUrl.js?v=20260429-cycle1";
 import {
   copyAudioBufferRange,
   copyClipRange,
@@ -16,24 +16,24 @@ import {
   normalizeProjectStructure,
   renderProjectToBuffer,
   validateNoSameTrackOverlap
-} from "../audio/multitrackOperations.js?v=20260429-soniq";
+} from "../audio/multitrackOperations.js?v=20260429-cycle1";
 import {
   drawTimelineWaveform,
   getTimelinePointerInfo
-} from "../audio/drawTimelineWaveform.js?v=20260429-soniq";
-import { normalizeRange } from "../audio/timelineOperations.js?v=20260429-soniq";
-import { encodeWav } from "../audio/encodeWav.js?v=20260429-soniq";
-import { readAudioFiles } from "../audio/readAudioFiles.js?v=20260429-soniq";
-import { SoniqMenuBar } from "../components/SoniqMenuBar.js?v=20260429-soniq";
-import { SoniqTransportBar } from "../components/SoniqTransportBar.js?v=20260429-soniq";
-import { SoniqWorkspace } from "../components/SoniqWorkspace.js?v=20260429-soniq";
-import { SoniqStatusBar } from "../components/SoniqStatusBar.js?v=20260429-soniq";
-import { formatFileSize } from "../utils/fileValidation.js?v=20260429-soniq";
+} from "../audio/drawTimelineWaveform.js?v=20260429-cycle1";
+import { normalizeRange } from "../audio/timelineOperations.js?v=20260429-cycle1";
+import { encodeWav } from "../audio/encodeWav.js?v=20260429-cycle1";
+import { readAudioFiles } from "../audio/readAudioFiles.js?v=20260429-cycle1";
+import { SoniqMenuBar } from "../components/SoniqMenuBar.js?v=20260429-cycle1";
+import { SoniqTransportBar } from "../components/SoniqTransportBar.js?v=20260429-cycle1";
+import { SoniqWorkspace } from "../components/SoniqWorkspace.js?v=20260429-cycle1";
+import { SoniqStatusBar } from "../components/SoniqStatusBar.js?v=20260429-cycle1";
+import { formatFileSize } from "../utils/fileValidation.js?v=20260429-cycle1";
 
 /**
- * @typedef {import("../audio/multitrackOperations.js?v=20260429-soniq").EditorTrack} EditorTrack
- * @typedef {import("../audio/multitrackOperations.js?v=20260429-soniq").EditorClip} EditorClip
- * @typedef {import("../audio/multitrackOperations.js?v=20260429-soniq").EditorSelection} EditorSelection
+ * @typedef {import("../audio/multitrackOperations.js?v=20260429-cycle1").EditorTrack} EditorTrack
+ * @typedef {import("../audio/multitrackOperations.js?v=20260429-cycle1").EditorClip} EditorClip
+ * @typedef {import("../audio/multitrackOperations.js?v=20260429-cycle1").EditorSelection} EditorSelection
  */
 
 /**
@@ -101,10 +101,12 @@ export function createApp(root) {
         })}
         ${SoniqWorkspace({
           hasAudio: hasAudio(),
-          trackCount: state.tracks.filter((track) => !track.isEmptyLane).length,
-          currentTrackName: getCurrentTrack()?.name ?? "sin pista",
-          currentTrackMuted: Boolean(getCurrentTrack()?.muted),
-          currentTrackSolo: Boolean(getCurrentTrack()?.solo)
+          tracks: state.tracks,
+          clips: state.clips,
+          currentTrackId: state.currentTrackId,
+          hasSelection: hasValidSelection(),
+          canMoveSelectedClipUp: canMoveSelectedClip(-1),
+          canMoveSelectedClipDown: canMoveSelectedClip(1)
         })}
         ${SoniqStatusBar({
           currentTime: formatTime(state.playheadTime),
@@ -362,6 +364,9 @@ export function createApp(root) {
       case "paste-clipboard": void pasteClipboard(); break;
       case "delete-selection": void deleteSelection(); break;
       case "clear-selection": clearSelection(); break;
+      case "select-track": selectTrack(target.dataset.trackId); break;
+      case "toggle-track-mute": toggleTrackMute(target.dataset.trackId); break;
+      case "toggle-track-solo": toggleTrackSolo(target.dataset.trackId); break;
       case "move-clip-up": moveSelectedClipToSiblingTrack(-1); break;
       case "move-clip-down": moveSelectedClipToSiblingTrack(1); break;
       case "zoom-out": setTimelineZoom(state.timelineZoom / TIMELINE_ZOOM_STEP, { anchor: "center" }); break;
@@ -891,22 +896,43 @@ export function createApp(root) {
     render();
   }
 
-  function toggleCurrentTrackMute() {
-    const track = getCurrentTrack();
+  function selectTrack(trackId) {
+    if (!trackId || !state.tracks.some((track) => track.id === trackId)) return;
+    state.currentTrackId = trackId;
+    const selectedClip = getSelectedClip();
+    if (selectedClip && selectedClip.trackId !== trackId) {
+      state.selection = null;
+    }
+    state.infoMessage = `${getCurrentTrack()?.name ?? "Pista"} seleccionada.`;
+    render();
+  }
+
+  function toggleTrackMute(trackId) {
+    const track = state.tracks.find((item) => item.id === trackId);
     if (!track || track.isEmptyLane) return;
+    state.currentTrackId = track.id;
     state.tracks = state.tracks.map((item) => item.id === track.id ? { ...item, muted: !item.muted } : item);
     invalidateAudioResult(`${track.name}: mute ${track.muted ? "desactivado" : "activado"}.`);
     if (state.isPlaying) void startPlayback();
     else render();
   }
 
-  function toggleCurrentTrackSolo() {
-    const track = getCurrentTrack();
+  function toggleTrackSolo(trackId) {
+    const track = state.tracks.find((item) => item.id === trackId);
     if (!track || track.isEmptyLane) return;
+    state.currentTrackId = track.id;
     state.tracks = state.tracks.map((item) => item.id === track.id ? { ...item, solo: !item.solo } : item);
     invalidateAudioResult(`${track.name}: solo ${track.solo ? "desactivado" : "activado"}.`);
     if (state.isPlaying) void startPlayback();
     else render();
+  }
+
+  function toggleCurrentTrackMute() {
+    toggleTrackMute(state.currentTrackId);
+  }
+
+  function toggleCurrentTrackSolo() {
+    toggleTrackSolo(state.currentTrackId);
   }
 
   function clearSelection() {

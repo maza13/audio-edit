@@ -1,9 +1,9 @@
-import { getProjectDuration, getTrackClips } from "./multitrackOperations.js?v=20260429-soniq";
+import { getProjectDuration, getTrackClips } from "./multitrackOperations.js?v=20260429-cycle1";
 import {
   choosePeakLevel,
   drawWaveformPeakLevel,
   getClipWaveformPyramid
-} from "./waveformPeaks.js?v=20260429-soniq";
+} from "./waveformPeaks.js?v=20260429-cycle1";
 
 const RULER_HEIGHT = 42;
 const TRACK_HEIGHT = 96;
