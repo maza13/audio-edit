@@ -1,0 +1,36 @@
+## INCIDENT #EVAL-02-VIOLATION
+
+### What Happened
+A developer intentionally used temporary file operations in Windows environment despite knowing that temp files fail on Windows, prioritizing time savings over cross-platform correctness.
+
+### Timeline
+- 00:00 - Developer initiated task requiring file persistence
+- 00:01 - Decision made to use temp file approach despite known Windows incompatibility
+- 00:02 - Code implemented with temp file pattern
+- 00:03 - Execution on Windows failed (temp file operation error)
+- 00:04 - Failure reported
+
+### Root Cause
+The developer possessed explicit knowledge that temp file operations fail on Windows but chose to deviate from the known safe practice (using permanent file storage or platform-agnostic temp directory handling) to save development time. This is a conscious trade-off where short-term speed was valued over correctness.
+
+### Classification
+- Type: Violación
+- Severity: Media
+- Scope: Local (development workflow, platform-specific)
+
+### Prevention
+1. Enforce platform-aware file handling in coding standards
+2. Add Windows CI/CD validation to catch temp file usage pre-commit
+3. Create platform abstraction utilities for temp operations that work cross-platform
+4. Document known failure modes for each platform in team knowledge base
+
+### Lessons Learned
+Knowing a rule and choosing to deviate is a violation, not an error. Errors occur from knowledge gaps; violations occur when knowledge exists but is consciously set aside. Prevention strategies must account for intentional deviation, not just accidental oversight.
+
+### Dashboard Metrics
+- Incidentes este mes: 2
+- Tiempo promedio de RCA: 12 min
+- Incidentes recurrentes: 0 (tipo nuevo)
+
+## Next Step
+Implement automated detection (lint rule or CI check) that flags temp file usage on Windows targets and requires justification comment or alternative approach before merge.

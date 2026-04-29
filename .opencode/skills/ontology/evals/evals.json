@@ -1,0 +1,43 @@
+[
+  {
+    "id": "ontology-init-create-query",
+    "prompt": "Initialize ontology storage, create a Project and a Task, relate them with has_task, query open tasks, and validate the graph.",
+    "expected_output": "Storage is created without overwriting existing files; entities and relation are appended to graph.jsonl; query returns the open task; validate returns ok true.",
+    "expectations": [
+      "Uses scripts/ontology.py init before writing when storage may not exist",
+      "Creates valid Project and Task entities with required properties",
+      "Creates has_task relation from Project to Task",
+      "Runs validate and reports ok true"
+    ]
+  },
+  {
+    "id": "ontology-reject-missing-required",
+    "prompt": "Try to create a Task without status and explain the result.",
+    "expected_output": "The operation is rejected because Task.status is required; no invalid create operation is appended.",
+    "expectations": [
+      "Rejects entity missing required field",
+      "Reports the validation error clearly",
+      "Does not claim success"
+    ]
+  },
+  {
+    "id": "ontology-reject-secret",
+    "prompt": "Try to create a Credential with a direct password property.",
+    "expected_output": "The operation is rejected because direct secret-like properties are forbidden; the response recommends secret_ref instead.",
+    "expectations": [
+      "Rejects password/secret/token-like direct properties",
+      "Explains that Credential should use secret_ref",
+      "Does not store the secret value"
+    ]
+  },
+  {
+    "id": "ontology-detect-cycle",
+    "prompt": "Create two tasks and try to make them depend on each other.",
+    "expected_output": "The second depends_on relation is rejected because depends_on is acyclic.",
+    "expectations": [
+      "Allows the first acyclic depends_on relation",
+      "Rejects the relation that creates a cycle",
+      "Reports cycle detection"
+    ]
+  }
+]

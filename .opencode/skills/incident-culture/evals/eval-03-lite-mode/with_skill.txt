@@ -1,0 +1,23 @@
+## INCIDENT EVALUATION — Lite Mode (3 Questions)
+
+**Prompt evaluated:** "the formatting skill crashed when given a null input"
+
+---
+
+### 1. What happened?
+Formatting skill received null input and crashed instead of handling it gracefully.
+
+### 2. How fix?
+Add null/undefined guard at skill entry point to return a safe error message.
+
+### 3. How prevent?
+Validate inputs before processing; document expected input types for all skills.
+
+---
+
+**Classification:** Error (honest mistake — missing input validation)
+**Severity:** Baja (workaround exists, cosmetic impact)
+**Scope:** Local (only affects the formatting skill)
+
+## Next Step
+Add null-check guard to formatting skill entry point.

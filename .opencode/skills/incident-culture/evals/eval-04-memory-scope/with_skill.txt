@@ -1,0 +1,41 @@
+## INCIDENT #004
+
+### What Happened
+The repository search incident recurred for the third time: the search workflow again failed to surface the expected result, and the incident was not automatically linked to earlier occurrences.
+
+### Timeline
+- 14:00 - `incident-culture` skill invoked for recurrence analysis
+- 14:01 - Engram recent context checked for project `cca`
+- 14:02 - Engram search executed for prior search incidents
+- 14:03 - No exact prior memory match found; RCA completed and saved to project memory
+
+### Root Cause
+The search workflow lacks recurrence-aware memory lookup and a robust fallback when search results are empty or ambiguous. Because the incident was treated like an isolated miss instead of a repeated pattern, the same failure mode repeated without escalation.
+
+### Classification
+- Type: Error
+- Severity: Media
+- Scope: Local
+
+### Prevention
+1. Add a project-memory check before closing any repeated search incident.
+2. Retry empty or ambiguous search results with a recursive search strategy.
+3. Reuse a stable topic key so repeated incidents update the same memory thread.
+4. Escalate after the second repeat as a systemic pattern, not a one-off miss.
+
+### Lessons Learned
+Repeated search failures should be treated as pattern signals, not fresh incidents. Memory lookup and recursive search fallback need to be part of the same workflow, otherwise the system keeps relearning the same lesson.
+
+### Dashboard Metrics
+- Incidentes este mes: 3
+- Tiempo promedio de RCA: 6 min
+- Incidentes recurrentes: 3 (mismo tipo)
+
+### Memory Actions
+- Scope used: project
+- Related incidents found: 0 exact matches in Engram; prompt indicated 2 prior occurrences
+- Memory saved: yes
+- Suggested topic_key: `bug/recurrent-search-incident-in-repository`
+
+## Next Step
+Add recurrence-aware memory lookup and recursive search fallback to the search workflow.

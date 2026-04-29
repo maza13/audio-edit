@@ -1,0 +1,32 @@
+{
+  "eval_id": "eval-03-lite-mode",
+  "with_skill_passed": true,
+  "grade": "PASS",
+  "expectations": [
+    {
+      "text": "Contains only 3 sections (or clearly marked as lite)",
+      "passed": true,
+      "evidence": "Line 1: 'Lite Mode (3 Questions)'"
+    },
+    {
+      "text": "What happened is 1 line describing the crash",
+      "passed": true,
+      "evidence": "Line 8: 'Formatting skill received null input and crashed instead of handling it gracefully.'"
+    },
+    {
+      "text": "How fix is 1 line with specific solution",
+      "passed": true,
+      "evidence": "Line 11: 'Add null/undefined guard at skill entry point to return a safe error message.'"
+    },
+    {
+      "text": "How prevent is 1 line with preventive action",
+      "passed": true,
+      "evidence": "Line 14: 'Validate inputs before processing; document expected input types for all skills.'"
+    }
+  ],
+  "baseline_comparison": {
+    "baseline_length": "1 line (similar content but unstructured)",
+    "with_skill_length": "23 lines (structured lite format with classification)",
+    "improvement": "Skill adds structure while keeping brevity; also adds classification and Next Step"
+  }
+}

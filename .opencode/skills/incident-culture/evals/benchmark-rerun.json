@@ -1,0 +1,36 @@
+{
+  "skill_name": "incident-culture",
+  "iteration": "rerun-2",
+  "summary": {
+    "baseline_passed": 0,
+    "with_skill_passed": 4,
+    "total_evals": 4
+  },
+  "results": [
+    {
+      "eval_id": "eval-01-search-failure",
+      "baseline": "fail",
+      "with_skill": "pass",
+      "notes": "Structured RCA plus Memory Actions and stable topic_key"
+    },
+    {
+      "eval_id": "eval-02-violation-detection",
+      "baseline": "fail",
+      "with_skill": "pass",
+      "notes": "Correctly classifies violation and suggests process controls"
+    },
+    {
+      "eval_id": "eval-03-lite-mode",
+      "baseline": "fail",
+      "with_skill": "pass",
+      "notes": "Keeps lite mode concise while adding memory metadata"
+    },
+    {
+      "eval_id": "eval-04-memory-scope",
+      "baseline": "fail",
+      "with_skill": "pass",
+      "notes": "Uses project memory, records related incidents, and reuses topic_key"
+    }
+  ],
+  "assessment": "The updated skill now consistently produces structured RCA output with Engram memory actions and topic_key suggestions."
+}

@@ -1,0 +1,33 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "id": "sched-mo15m70v-akjnvg",
+      "type": "once",
+      "motherSessionID": "ses_26ae58fefffer0S2INP83MjQmF",
+      "motherAgent": "capitan-picard",
+      "directory": "C:\\Comando Central\\CCA",
+      "prompt": "hola, busca en la wiki sobre opencode y su cli",
+      "timezone": "America/Mexico_City",
+      "runAt": "2026-04-16T07:25:05.967Z",
+      "status": "executed",
+      "createdAt": "2026-04-16T07:24:45.967Z",
+      "executedAt": "2026-04-16T07:25:51.160Z",
+      "lastRunAt": "2026-04-16T07:25:51.160Z"
+    },
+    {
+      "id": "sched-mo15o4n5-pxb4az",
+      "type": "once",
+      "motherSessionID": "ses_26ae58fefffer0S2INP83MjQmF",
+      "motherAgent": "capitan-picard",
+      "directory": "C:\\Comando Central\\CCA",
+      "prompt": "hola, busca en la wiki sobre opencode y su cli",
+      "timezone": "America/Mexico_City",
+      "runAt": "2026-04-16T07:26:36.193Z",
+      "status": "executed",
+      "createdAt": "2026-04-16T07:26:16.193Z",
+      "executedAt": "2026-04-16T07:27:04.050Z",
+      "lastRunAt": "2026-04-16T07:27:04.050Z"
+    }
+  ]
+}

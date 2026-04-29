@@ -1,0 +1,34 @@
+{
+  "skill_name": "incident-culture",
+  "iteration": "1",
+  "timestamp": "2026-04-14T09:30:00Z",
+  "evals_summary": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0
+  },
+  "results": [
+    {
+      "eval_id": "eval-01-search-failure",
+      "grade": "PASS",
+      "with_skill": true,
+      "baseline_score": "generic 1-line response",
+      "with_skill_score": "full structured RCA (35 lines)"
+    },
+    {
+      "eval_id": "eval-02-violation-detection",
+      "grade": "PASS",
+      "with_skill": true,
+      "baseline_score": "correct classification but unstructured",
+      "with_skill_score": "correct Violación + full RCA + process controls"
+    },
+    {
+      "eval_id": "eval-03-lite-mode",
+      "grade": "PASS",
+      "with_skill": true,
+      "baseline_score": "brief 1-line response",
+      "with_skill_score": "structured 3-question lite format + classification"
+    }
+  ],
+  "overall_assessment": "All 3 evals PASSED. The skill provides significant improvement over baseline in all scenarios: structured output, correct classification, actionable prevention items."
+}

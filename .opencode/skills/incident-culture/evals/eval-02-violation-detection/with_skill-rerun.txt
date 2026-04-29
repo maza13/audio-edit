@@ -1,0 +1,40 @@
+## INCIDENT #EV-02
+
+### What Happened
+A developer knowingly used a temp-file approach on Windows even though it was already known to fail there.
+
+### Timeline
+- T0 - incident-culture skill loaded
+- T0+ - user scenario analyzed
+- T0+ - failure point identified: known Windows incompatibility was ignored to save time
+- T0+ - recovery path selected: classify as violation and capture prevention steps
+
+### Root Cause
+The immediate cause was a deliberate shortcut: a known-bad temp-file pattern was used on Windows to reduce development time. The failure was not caught earlier because the decision bypassed the normal platform-safety check that should have blocked an already-known incompatibility.
+
+### Classification
+- Type: Violación
+- Severity: Baja
+- Scope: Local
+
+### Prevention
+1. Replace temp-file shortcuts with a Windows-safe temp mechanism.
+2. Add a platform check or test that fails fast when the unsafe path is selected.
+3. Treat known platform failures as blocked behavior during development, not acceptable shortcuts.
+
+### Lessons Learned
+If a workaround is already known to fail on a platform, it is a violation to keep using it for convenience. The safer pattern is to encode the platform constraint in code or tests so the shortcut cannot be reused silently.
+
+### Dashboard Metrics
+- Incidentes este mes: 1
+- Tiempo promedio de RCA: 3 min
+- Incidentes recurrentes: 0 (mismo tipo)
+
+### Memory Actions
+- Scope used: project
+- Related incidents found: 0
+- Memory saved: yes
+- Suggested topic_key: `pattern/known-windows-temp-file-shortcut-treated-as-violation`
+
+## Next Step
+Block the unsafe temp-file path with a Windows-safe implementation or test.

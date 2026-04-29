@@ -1,0 +1,5 @@
+This looks like a recurring search incident. I couldn't find matching prior incident memory in the project history, but the prompt itself says it has already happened twice, which strongly suggests an unresolved underlying issue rather than a one-off glitch.
+
+The most likely failure mode is that the search behavior is still brittle somewhere in the repository, or that a previous fix only covered one code path while another entry point still reproduces the problem. I would verify every search path, normalization step, and retry/alternate flow before assuming the issue is closed.
+
+So yes, it seems recurring, and the main risk is that the same defect is still present in more than one place.

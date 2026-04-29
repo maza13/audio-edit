@@ -1,0 +1,39 @@
+## INCIDENT #004
+
+### What Happened
+The repository saw the same search incident again, and this run confirmed it was part of an existing recurring pattern rather than a one-off failure.
+
+### Timeline
+- 16:02 - Project memory checked for prior matching incidents
+- 16:03 - Matching incident found and recurrence confirmed
+- 16:04 - RCA completed and project-scope memory saved
+
+### Root Cause
+The incident was handled as a fresh search failure instead of being linked to the existing project memory thread on first review. The missing step was a consistent recurrence check plus stable topic-key reuse, which allowed the same issue to reappear as a separate analysis.
+
+### Classification
+- Type: Error
+- Severity: Media
+- Scope: Local
+
+### Prevention
+1. Check project memory before finalizing any repeated search RCA.
+2. Reuse the same stable topic_key for the same incident family.
+3. Escalate to a systemic pattern when the same search failure appears more than once.
+
+### Lessons Learned
+Recurring search incidents should be treated as one evolving pattern, not as isolated repeats. Memory lookup is part of the incident workflow, not an optional follow-up.
+
+### Dashboard Metrics
+- Incidentes este mes: N/A
+- Tiempo promedio de RCA: N/A
+- Incidentes recurrentes: 1 (one prior matching project memory entry found)
+
+### Memory Actions
+- Scope used: project
+- Related incidents found: 1
+- Memory saved: yes
+- Suggested topic_key: bug/recurrent-search-incident-in-repository
+
+## Next Step
+Make recurrence checks mandatory before closing any future search incident in this repository.

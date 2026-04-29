@@ -1,0 +1,35 @@
+## INCIDENT #001
+
+### What Happened
+The search skill (cca-protocol-search) returned empty results for "config*.json" when the file exists in a subdirectory of the working directory.
+
+### Timeline
+- HH:MM - cca-protocol-search invoked with pattern "config*.json"
+- HH:MM.s - glob tool executed with non-recursive flag
+- HH:MM.s - Empty result returned to caller
+- HH:MM - User reported failure / incident raised
+
+### Root Cause
+The glob pattern was executed without the recursive flag, causing subdirectories to be excluded from the search. The skill assumed a flat directory structure and did not detect that wildcard patterns typically require recursive traversal to find files in nested paths.
+
+### Classification
+- Type: Error
+- Severity: Media
+- Scope: Local (affects only search operations within cca-protocol-search)
+
+### Prevention
+1. Update cca-protocol-search skill to use globRecursive when pattern contains wildcards (* or ?)
+2. Add fallback validation: if initial search returns empty and pattern has wildcards, retry with recursive flag
+3. Document the default behavior and wildcard handling in skill README
+4. Add unit test case for nested file discovery with wildcard patterns
+
+### Lessons Learned
+Glob patterns without the recursive flag will silently skip subdirectories. Search skills must treat wildcard patterns as implicit indicators that recursive search may be needed, especially when initial results are empty. Assumptions about directory depth should be validated, not inferred.
+
+### Dashboard Metrics
+- Incidentes este mes: 1
+- Tiempo promedio de RCA: 5 min
+- Incidentes recurrentes: 0 (nuevo tipo)
+
+## Next Step
+Update cca-protocol-search to detect wildcard patterns and automatically apply recursive globbing as the default behavior for such patterns.

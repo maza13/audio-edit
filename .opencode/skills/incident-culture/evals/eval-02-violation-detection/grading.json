@@ -1,0 +1,32 @@
+{
+  "eval_id": "eval-02-violation-detection",
+  "with_skill_passed": true,
+  "grade": "PASS",
+  "expectations": [
+    {
+      "text": "Classification type is Violation",
+      "passed": true,
+      "evidence": "Line 17: 'Type: Violación'"
+    },
+    {
+      "text": "Explanation mentions intentional deviation despite known risk",
+      "passed": true,
+      "evidence": "Line 14: 'possessed explicit knowledge...but chose to deviate...conscious trade-off'"
+    },
+    {
+      "text": "Severity is proportional (not Critical — no data loss or security issue)",
+      "passed": true,
+      "evidence": "Line 18: 'Severity: Media' (not Critical)"
+    },
+    {
+      "text": "Prevention focuses on process controls, not training",
+      "passed": true,
+      "evidence": "Lines 21-25: enforcement, CI/CD validation, abstraction utilities (not 'train better')"
+    }
+  ],
+  "baseline_comparison": {
+    "baseline_classification": "Correctly identified as Violation",
+    "with_skill_classification": "Correctly identified as Violación with structured format",
+    "improvement": "Baseline was correct but unstructured; skill provides full RCA framework with actionable output"
+  }
+}

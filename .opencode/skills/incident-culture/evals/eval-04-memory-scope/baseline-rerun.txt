@@ -1,0 +1,5 @@
+This does look like a recurring search incident. Prior project memory already records the same search failure as a repeated issue, so this is not reading like a one-off regression.
+
+The likely shape of the problem is that one search path was fixed or observed before, but another entry point or normalization branch is still producing the same failure. The important part is that the incident history and the current prompt line up, so the repeated behavior is credible.
+
+The safest conclusion is that the underlying defect is still not fully closed, and the prior memory should be treated as evidence that the same topic needs to stay grouped under one thread instead of being split into separate incidents.

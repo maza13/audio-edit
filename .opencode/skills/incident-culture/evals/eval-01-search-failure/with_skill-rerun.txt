@@ -1,0 +1,41 @@
+## INCIDENT #002
+
+### What Happened
+The search skill returned no results for `config*.json` even though a matching file exists in a subdirectory of the working tree.
+
+### Timeline
+- T0 - Search skill invoked with pattern `config*.json`
+- T0+1 - Search used a non-recursive glob/search path
+- T0+2 - Empty result returned
+- T0+3 - Incident reported
+
+### Root Cause
+The search implementation treated the pattern as a shallow lookup, so nested directories were not traversed. Because wildcard patterns can match nested files only with recursive behavior, the skill silently missed the file instead of falling back to a recursive search.
+
+### Classification
+- Type: Error
+- Severity: Media
+- Scope: Local
+
+### Prevention
+1. Detect wildcard patterns and default to recursive search.
+2. If a wildcard query returns no matches, retry recursively before returning empty.
+3. Add a regression test with a nested `config*.json` fixture.
+4. Document that wildcard searches are recursive by default in this skill.
+
+### Lessons Learned
+Wildcard searches are depth-sensitive; a non-recursive default can look like a correct empty result while actually hiding nested matches. Search skills should treat empty wildcard results as suspicious until recursion is verified.
+
+### Dashboard Metrics
+- Incidentes este mes: 1
+- Tiempo promedio de RCA: 5 min
+- Incidentes recurrentes: 1 (same pattern)
+
+### Memory Actions
+- Scope used: project
+- Related incidents found: 1
+- Memory saved: yes
+- Suggested topic_key: `bug/recurrent-search-incident-in-repository`
+
+## Next Step
+Make recursive search the default path for wildcard file patterns and add a nested-file regression test.

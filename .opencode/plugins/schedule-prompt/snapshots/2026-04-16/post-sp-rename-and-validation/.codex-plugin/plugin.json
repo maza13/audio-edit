@@ -1,0 +1,46 @@
+{
+  "name": "schedule-prompt",
+  "version": "2.1.0",
+  "description": "Schedules prompts into the current or explicit OpenCode session. Supports once, interval, and daily modes.",
+  "author": {
+    "name": "Comando Central CCA",
+    "email": "",
+    "url": ""
+  },
+  "homepage": "",
+  "repository": "",
+  "license": "MIT",
+  "keywords": [
+    "opencode",
+    "scheduler",
+    "prompt",
+    "session",
+    "mother-session",
+    "delayed"
+  ],
+  "skills": null,
+  "hooks": null,
+  "mcpServers": null,
+  "apps": null,
+  "interface": {
+    "displayName": "Schedule Prompt",
+    "shortDescription": "Schedules prompts into current or target sessions",
+    "longDescription": "OpenCode plugin for scheduling prompts into the current session or an explicit target session ID, with once, interval, and daily modes plus management tools.",
+    "developerName": "CCA",
+    "category": "Utility",
+    "capabilities": [
+      "Interactive"
+    ],
+    "websiteURL": "",
+    "privacyPolicyURL": "",
+    "termsOfServiceURL": "",
+    "defaultPrompt": [
+      "Schedule 678 x 246 in 60 seconds",
+      "Schedule a reminder in 1 minute"
+    ],
+    "brandColor": "#14B8A6",
+    "composerIcon": null,
+    "logo": null,
+    "screenshots": []
+  }
+}

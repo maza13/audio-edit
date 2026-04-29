@@ -1,0 +1,46 @@
+{
+  "name": "session-wake-scheduler",
+"version": "2.0.0",
+  "description": "Schedules prompts and re-injects them into the mother/origin OpenCode session. Supports once, interval, and daily scheduling modes.",
+  "author": {
+    "name": "Comando Central CCA",
+    "email": "",
+    "url": ""
+  },
+  "homepage": "",
+  "repository": "",
+  "license": "MIT",
+  "keywords": [
+    "opencode",
+    "scheduler",
+    "prompt",
+    "session",
+    "mother-session",
+    "delayed"
+  ],
+  "skills": null,
+  "hooks": null,
+  "mcpServers": null,
+  "apps": null,
+  "interface": {
+    "displayName": "Session Wake Scheduler",
+    "shortDescription": "Schedules a prompt back to the origin session",
+    "longDescription": "Minimal OpenCode plugin that stores delayed prompts, captures the mother session from ToolContext, and later re-injects the prompt into that same session using session.prompt.",
+    "developerName": "CCA",
+    "category": "Utility",
+    "capabilities": [
+      "Interactive"
+    ],
+    "websiteURL": "",
+    "privacyPolicyURL": "",
+    "termsOfServiceURL": "",
+    "defaultPrompt": [
+      "Schedule 678 x 246 in 60 seconds",
+      "Schedule a reminder in 1 minute"
+    ],
+    "brandColor": "#14B8A6",
+    "composerIcon": null,
+    "logo": null,
+    "screenshots": []
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "eval_id": "eval-01-search-failure",
+  "with_skill_passed": true,
+  "grade": "PASS",
+  "expectations": [
+    {
+      "text": "Contains INCIDENT header with ID number",
+      "passed": true,
+      "evidence": "Line 1: ## INCIDENT #001"
+    },
+    {
+      "text": "Contains timeline with at least 3 timestamped entries",
+      "passed": true,
+      "evidence": "Lines 6-10: 4 timestamped entries (HH:MM format)"
+    },
+    {
+      "text": "Root cause identifies glob (non-recursive) as the issue",
+      "passed": true,
+      "evidence": "Line 13: 'executed without the recursive flag, causing subdirectories to be excluded'"
+    },
+    {
+      "text": "Classification includes type=Error (not Violation or Negligence)",
+      "passed": true,
+      "evidence": "Line 16: 'Type: Error'"
+    },
+    {
+      "text": "Prevention has at least 2 concrete actionable items",
+      "passed": true,
+      "evidence": "Lines 21-24: 4 concrete prevention items"
+    },
+    {
+      "text": "Ends with Next Step section",
+      "passed": true,
+      "evidence": "Line 34: '## Next Step'"
+    }
+  ],
+  "baseline_comparison": {
+    "baseline_length": "1 line (generic)",
+    "with_skill_length": "35 lines (structured RCA)",
+    "improvement": "Significant structured improvement with skill"
+  }
+}

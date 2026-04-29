@@ -1,0 +1,33 @@
+## INCIDENT #lite
+
+### What Happened
+The formatting skill crashed when it received a null input.
+
+### Timeline
+- Invoke formatting skill
+- Null input passed in
+- Crash at formatting entry path
+- Analysis performed
+
+### Root Cause
+The skill did not guard against null input before entering the formatting flow. That is an input-validation gap, not a user error.
+
+### Classification
+- Type: Error
+- Severity: Media
+- Scope: Local
+
+### Prevention
+Add an explicit null check at the skill boundary and return a safe fallback or validation error. Cover the null case with a test.
+
+### Lessons Learned
+Null input needs to be handled at the boundary, before any formatting assumptions are made.
+
+### Memory Actions
+- Scope used: project
+- Related incidents found: 0
+- Memory saved: yes
+- Suggested topic_key: `bug/captured-null-input-crash-in-formatting-skill`
+
+## Next Step
+Add a null-input guard and a regression test in the formatting skill.

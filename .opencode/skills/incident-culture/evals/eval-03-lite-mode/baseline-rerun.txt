@@ -1,0 +1,1 @@
+Likely a null-handling bug in the formatting skill's input validation or crash path. Reproduce with empty input and add a guard so it fails safely instead of dereferencing nil.

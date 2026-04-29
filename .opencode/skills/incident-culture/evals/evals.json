@@ -1,0 +1,131 @@
+{
+  "evals": [
+    {
+      "id": "eval-01-search-failure",
+      "prompt": "The search skill failed to find \"config*.json\" when the file exists in a subdirectory. Run a full RCA analysis.",
+      "expected_output": "Must include: incident title with ID, timeline with timestamps, root cause section, classification (type/severity/scope), prevention with 2+ concrete actions, lessons learned, and next step",
+      "expectations": [
+        {
+          "text": "Contains INCIDENT header with ID number",
+          "passed": false,
+          "evidence": ""
+        },
+        {
+          "text": "Contains timeline with at least 3 timestamped entries",
+          "passed": false,
+          "evidence": ""
+        },
+        {
+          "text": "Root cause identifies glob (non-recursive) as the issue",
+          "passed": false,
+          "evidence": ""
+        },
+        {
+          "text": "Classification includes type=Error (not Violation or Negligence)",
+          "passed": false,
+          "evidence": ""
+        },
+        {
+          "text": "Prevention has at least 2 concrete actionable items",
+          "passed": false,
+          "evidence": ""
+        },
+        {
+          "text": "Ends with Next Step section",
+          "passed": false,
+          "evidence": ""
+        }
+      ],
+      "files": []
+    },
+    {
+      "id": "eval-02-violation-detection",
+      "prompt": "Analyze: A developer knew temp files fail on Windows but used them anyway to save time during development. Run RCA.",
+      "expected_output": "Should classify as Violation, not Error. Must explain that the person knew the rule and deviated intentionally.",
+      "expectations": [
+        {
+          "text": "Classification type is Violation",
+          "passed": false,
+          "evidence": ""
+        },
+        {
+          "text": "Explanation mentions intentional deviation despite known risk",
+          "passed": false,
+          "evidence": ""
+        },
+        {
+          "text": "Severity is proportional (not Critical — no data loss or security issue)",
+          "passed": false,
+          "evidence": ""
+        },
+        {
+          "text": "Prevention focuses on process controls, not training",
+          "passed": false,
+          "evidence": ""
+        }
+      ],
+      "files": []
+    },
+    {
+      "id": "eval-03-lite-mode",
+      "prompt": "Quick analysis: the formatting skill crashed when given a null input. Keep it brief.",
+      "expected_output": "3-question lite format: What happened, How fix, How prevent — each 1 line.",
+      "expectations": [
+        {
+          "text": "Contains only 3 sections (or clearly marked as lite)",
+          "passed": false,
+          "evidence": ""
+        },
+        {
+          "text": "What happened is 1 line describing the crash",
+          "passed": false,
+          "evidence": ""
+        },
+        {
+          "text": "How fix is 1 line with specific solution",
+          "passed": false,
+          "evidence": ""
+        },
+        {
+          "text": "How prevent is 1 line with preventive action",
+          "passed": false,
+          "evidence": ""
+        }
+      ],
+      "files": []
+    },
+    {
+      "id": "eval-04-memory-scope",
+      "prompt": "We already saw this search incident twice in this repository. Use prior incident memory if relevant, run the RCA, and save the result in the right scope.",
+      "expected_output": "Must mention memory recall, use project scope, and include a Memory Actions section showing scope and save result.",
+      "expectations": [
+        {
+          "text": "Uses project scope for repository-specific incident memory",
+          "passed": false,
+          "evidence": ""
+        },
+        {
+          "text": "Mentions related incidents found or prior memory consulted",
+          "passed": false,
+          "evidence": ""
+        },
+        {
+          "text": "Includes Memory Actions section",
+          "passed": false,
+          "evidence": ""
+        },
+        {
+          "text": "Saves result after RCA rather than treating memory as optional",
+          "passed": false,
+          "evidence": ""
+        },
+        {
+          "text": "Suggests a stable topic_key for the memory entry",
+          "passed": false,
+          "evidence": ""
+        }
+      ],
+      "files": []
+    }
+  ]
+}

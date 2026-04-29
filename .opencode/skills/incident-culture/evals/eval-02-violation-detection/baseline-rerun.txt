@@ -1,0 +1,4 @@
+This is a violation, not a mistake: the developer knew temp files fail on Windows and used them anyway to save time.
+The failure type is intentional rule bypass under time pressure.
+The main cause is a tradeoff decision that prioritized speed over known compatibility risk.
+That kind of shortcut usually points to weak enforcement and a habit of accepting temporary noncompliance during development.
