@@ -684,6 +684,14 @@ button:disabled, select:disabled { cursor: not-allowed; opacity: 0.45; }
   font-size: 0.82rem;
 }
 
+.drop-overlay .drop-shortcuts {
+  max-width: min(680px, 80vw);
+  margin-top: 8px;
+  color: rgba(155, 168, 183, 0.78);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
 /* === Status Bar === */
 .soniq-statusbar {
   display: flex;

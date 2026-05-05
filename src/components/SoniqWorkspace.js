@@ -111,6 +111,7 @@ export function SoniqWorkspace(props) {
             <div class="drop-overlay" data-testid="drop-zone">
               <strong>Arrastrá audios acá</strong>
               <span>Cada archivo crea una pista.</span>
+              <span class="drop-shortcuts">Atajos: Espacio reproduce · ←/→ mueve 1s · Shift+←/→ mueve 5s · Ctrl +/- zoom</span>
             </div>
           `}
         </div>
