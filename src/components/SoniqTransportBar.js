@@ -18,10 +18,10 @@ export function SoniqTransportBar(props) {
   return `
     <section class="soniq-transport" data-testid="soniq-transport">
       <div class="transport-group transport-btns">
-        <button class="transport-btn" type="button" data-action="skip-back" title="Retroceder" aria-label="Retroceder" disabled>
+        <button class="transport-btn" type="button" data-action="skip-back" title="Ir al inicio" aria-label="Ir al inicio" ${props.hasAudio ? "" : "disabled"}>
           <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M6 6h2v12H6V6zm3.5 6 8.5 6V6l-8.5 6z"/></svg>
         </button>
-        <button class="transport-btn" type="button" data-action="rewind" title="Rebobinar" aria-label="Rebobinar" disabled>
+        <button class="transport-btn" type="button" data-action="rewind" title="Retroceder 5 segundos" aria-label="Retroceder 5 segundos" ${props.hasAudio ? "" : "disabled"}>
           <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6 8.5 6V6l-8.5 6z"/></svg>
         </button>
         <button class="transport-btn play-btn ${props.isPlaying ? "is-active" : ""}" type="button" data-action="toggle-playback" ${props.hasAudio ? "" : "disabled"} aria-label="${props.isPlaying ? "Pausar" : "Reproducir"}">
@@ -30,10 +30,10 @@ export function SoniqTransportBar(props) {
             : `<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M8 5v14l11-7z"/></svg>`
           }
         </button>
-        <button class="transport-btn" type="button" data-action="forward" title="Adelantar" aria-label="Adelantar" disabled>
+        <button class="transport-btn" type="button" data-action="forward" title="Adelantar 5 segundos" aria-label="Adelantar 5 segundos" ${props.hasAudio ? "" : "disabled"}>
           <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>
         </button>
-        <button class="transport-btn" type="button" data-action="skip-forward" title="Avanzar" aria-label="Avanzar" disabled>
+        <button class="transport-btn" type="button" data-action="skip-forward" title="Ir al final" aria-label="Ir al final" ${props.hasAudio ? "" : "disabled"}>
           <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M6 18l8.5-6L6 6v12zm10-12v12h2V6h-2z"/></svg>
         </button>
         <div class="record-dot" title="Grabación" aria-label="Grabación deshabilitada">

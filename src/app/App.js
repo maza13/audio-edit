@@ -1,6 +1,6 @@
-import { decodeAudioFile } from "../audio/decodeAudioFile.js?v=20260429-cycle1";
-import { decodeVideoFile } from "../audio/decodeVideoFile.js?v=20260429-cycle1";
-import { createAudioPreviewUrl } from "../audio/createAudioPreviewUrl.js?v=20260429-cycle1";
+import { decodeAudioFile } from "../audio/decodeAudioFile.js?v=20260504-cycle2";
+import { decodeVideoFile } from "../audio/decodeVideoFile.js?v=20260504-cycle2";
+import { createAudioPreviewUrl } from "../audio/createAudioPreviewUrl.js?v=20260504-cycle2";
 import {
   copyAudioBufferRange,
   copyClipRange,
@@ -16,24 +16,24 @@ import {
   normalizeProjectStructure,
   renderProjectToBuffer,
   validateNoSameTrackOverlap
-} from "../audio/multitrackOperations.js?v=20260429-cycle1";
+} from "../audio/multitrackOperations.js?v=20260504-cycle2";
 import {
   drawTimelineWaveform,
   getTimelinePointerInfo
-} from "../audio/drawTimelineWaveform.js?v=20260429-cycle1";
-import { normalizeRange } from "../audio/timelineOperations.js?v=20260429-cycle1";
-import { encodeWav } from "../audio/encodeWav.js?v=20260429-cycle1";
-import { readAudioFiles } from "../audio/readAudioFiles.js?v=20260429-cycle1";
-import { SoniqMenuBar } from "../components/SoniqMenuBar.js?v=20260429-cycle1";
-import { SoniqTransportBar } from "../components/SoniqTransportBar.js?v=20260429-cycle1";
-import { SoniqWorkspace } from "../components/SoniqWorkspace.js?v=20260429-cycle1";
-import { SoniqStatusBar } from "../components/SoniqStatusBar.js?v=20260429-cycle1";
-import { formatFileSize } from "../utils/fileValidation.js?v=20260429-cycle1";
+} from "../audio/drawTimelineWaveform.js?v=20260504-cycle2";
+import { normalizeRange } from "../audio/timelineOperations.js?v=20260504-cycle2";
+import { encodeWav } from "../audio/encodeWav.js?v=20260504-cycle2";
+import { readAudioFiles } from "../audio/readAudioFiles.js?v=20260504-cycle2";
+import { SoniqMenuBar } from "../components/SoniqMenuBar.js?v=20260504-cycle2";
+import { SoniqTransportBar } from "../components/SoniqTransportBar.js?v=20260504-cycle2";
+import { SoniqWorkspace } from "../components/SoniqWorkspace.js?v=20260504-cycle2";
+import { SoniqStatusBar } from "../components/SoniqStatusBar.js?v=20260504-cycle2";
+import { formatFileSize } from "../utils/fileValidation.js?v=20260504-cycle2";
 
 /**
- * @typedef {import("../audio/multitrackOperations.js?v=20260429-cycle1").EditorTrack} EditorTrack
- * @typedef {import("../audio/multitrackOperations.js?v=20260429-cycle1").EditorClip} EditorClip
- * @typedef {import("../audio/multitrackOperations.js?v=20260429-cycle1").EditorSelection} EditorSelection
+ * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle2").EditorTrack} EditorTrack
+ * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle2").EditorClip} EditorClip
+ * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle2").EditorSelection} EditorSelection
  */
 
 /**
@@ -374,6 +374,10 @@ export function createApp(root) {
       case "zoom-reset": setTimelineZoom(1, { anchor: "center" }); break;
       case "toggle-current-track-mute": toggleCurrentTrackMute(); break;
       case "toggle-current-track-solo": toggleCurrentTrackSolo(); break;
+      case "skip-back": jumpToStart(); break;
+      case "rewind": jumpBySeconds(-TRANSPORT_JUMP_SECONDS); break;
+      case "forward": jumpBySeconds(TRANSPORT_JUMP_SECONDS); break;
+      case "skip-forward": jumpToEnd(); break;
       case "export-wav": void exportWav(); break;
     }
   }
@@ -706,6 +710,22 @@ export function createApp(root) {
       return;
     }
     if (renderAfter) render();
+  }
+
+  function jumpToStart() {
+    if (!hasAudio()) return;
+    setPlayhead(0, { restartPlayback: state.isPlaying });
+  }
+
+  function jumpToEnd() {
+    if (!hasAudio()) return;
+    setPlayhead(getDuration(), { restartPlayback: false });
+    if (state.isPlaying) pausePlayback({ renderAfter: true });
+  }
+
+  function jumpBySeconds(deltaSeconds) {
+    if (!hasAudio()) return;
+    setPlayhead(state.playheadTime + deltaSeconds, { restartPlayback: state.isPlaying });
   }
 
   async function copySelection() {
@@ -1172,6 +1192,7 @@ function createAudioContext() {
 const MIN_TIMELINE_ZOOM = 1;
 const MAX_TIMELINE_ZOOM = 8;
 const TIMELINE_ZOOM_STEP = 1.5;
+const TRANSPORT_JUMP_SECONDS = 5;
 
 function formatZoom(zoom) {
   return `${zoom.toFixed(1)}x`;
