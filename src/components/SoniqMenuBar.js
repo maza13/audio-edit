@@ -40,7 +40,7 @@ export function SoniqMenuBar(props) {
         <button class="menu-item" type="button" data-action="open-command-menu" data-menu-kind="edit" aria-label="Menú editar">edit</button>
         <button class="menu-item" type="button" data-action="open-command-menu" data-menu-kind="track" aria-label="Menú pista">track</button>
         <button class="menu-item" type="button" data-action="open-command-menu" data-menu-kind="clip" aria-label="Menú clip">clip</button>
-        <span class="menu-item disabled" aria-disabled="true" title="No implementado">effects</span>
+        <button class="menu-item" type="button" data-action="open-command-menu" data-menu-kind="effects" aria-label="Menú efectos">effects</button>
         <div class="menu-item-group">
           <button class="menu-item-btn" type="button" data-action="export-wav" ${props.hasAudio ? "" : "disabled"}>render</button>
           ${props.hasResult && props.resultUrl ? `

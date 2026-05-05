@@ -1,6 +1,6 @@
-import { decodeAudioFile } from "../audio/decodeAudioFile.js?v=20260504-cycle4";
-import { decodeVideoFile } from "../audio/decodeVideoFile.js?v=20260504-cycle4";
-import { createAudioPreviewUrl } from "../audio/createAudioPreviewUrl.js?v=20260504-cycle4";
+import { decodeAudioFile } from "../audio/decodeAudioFile.js?v=20260504-cycle5";
+import { decodeVideoFile } from "../audio/decodeVideoFile.js?v=20260504-cycle5";
+import { createAudioPreviewUrl } from "../audio/createAudioPreviewUrl.js?v=20260504-cycle5";
 import {
   copyAudioBufferRange,
   copyClipRange,
@@ -17,24 +17,24 @@ import {
   normalizeProjectStructure,
   renderProjectToBuffer,
   validateNoSameTrackOverlap
-} from "../audio/multitrackOperations.js?v=20260504-cycle4";
+} from "../audio/multitrackOperations.js?v=20260504-cycle5";
 import {
   drawTimelineWaveform,
   getTimelinePointerInfo
-} from "../audio/drawTimelineWaveform.js?v=20260504-cycle4";
-import { normalizeRange } from "../audio/timelineOperations.js?v=20260504-cycle4";
-import { encodeWav } from "../audio/encodeWav.js?v=20260504-cycle4";
-import { readAudioFiles } from "../audio/readAudioFiles.js?v=20260504-cycle4";
-import { SoniqMenuBar } from "../components/SoniqMenuBar.js?v=20260504-cycle4";
-import { SoniqTransportBar } from "../components/SoniqTransportBar.js?v=20260504-cycle4";
-import { SoniqWorkspace } from "../components/SoniqWorkspace.js?v=20260504-cycle4";
-import { SoniqStatusBar } from "../components/SoniqStatusBar.js?v=20260504-cycle4";
-import { formatFileSize } from "../utils/fileValidation.js?v=20260504-cycle4";
+} from "../audio/drawTimelineWaveform.js?v=20260504-cycle5";
+import { normalizeRange } from "../audio/timelineOperations.js?v=20260504-cycle5";
+import { encodeWav } from "../audio/encodeWav.js?v=20260504-cycle5";
+import { readAudioFiles } from "../audio/readAudioFiles.js?v=20260504-cycle5";
+import { SoniqMenuBar } from "../components/SoniqMenuBar.js?v=20260504-cycle5";
+import { SoniqTransportBar } from "../components/SoniqTransportBar.js?v=20260504-cycle5";
+import { SoniqWorkspace } from "../components/SoniqWorkspace.js?v=20260504-cycle5";
+import { SoniqStatusBar } from "../components/SoniqStatusBar.js?v=20260504-cycle5";
+import { formatFileSize } from "../utils/fileValidation.js?v=20260504-cycle5";
 
 /**
- * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle4").EditorTrack} EditorTrack
- * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle4").EditorClip} EditorClip
- * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle4").EditorSelection} EditorSelection
+ * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle5").EditorTrack} EditorTrack
+ * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle5").EditorClip} EditorClip
+ * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle5").EditorSelection} EditorSelection
  */
 
 /**
