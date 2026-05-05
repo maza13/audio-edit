@@ -1,6 +1,6 @@
-import { decodeAudioFile } from "../audio/decodeAudioFile.js?v=20260504-cycle3";
-import { decodeVideoFile } from "../audio/decodeVideoFile.js?v=20260504-cycle3";
-import { createAudioPreviewUrl } from "../audio/createAudioPreviewUrl.js?v=20260504-cycle3";
+import { decodeAudioFile } from "../audio/decodeAudioFile.js?v=20260504-cycle4";
+import { decodeVideoFile } from "../audio/decodeVideoFile.js?v=20260504-cycle4";
+import { createAudioPreviewUrl } from "../audio/createAudioPreviewUrl.js?v=20260504-cycle4";
 import {
   copyAudioBufferRange,
   copyClipRange,
@@ -10,30 +10,31 @@ import {
   deleteClipRange,
   duplicateBuffer,
   ensureTrailingEmptyTrack,
+  fadeClipRange,
   getProjectDuration,
   moveClipToTime,
   moveClipToTrack,
   normalizeProjectStructure,
   renderProjectToBuffer,
   validateNoSameTrackOverlap
-} from "../audio/multitrackOperations.js?v=20260504-cycle3";
+} from "../audio/multitrackOperations.js?v=20260504-cycle4";
 import {
   drawTimelineWaveform,
   getTimelinePointerInfo
-} from "../audio/drawTimelineWaveform.js?v=20260504-cycle3";
-import { normalizeRange } from "../audio/timelineOperations.js?v=20260504-cycle3";
-import { encodeWav } from "../audio/encodeWav.js?v=20260504-cycle3";
-import { readAudioFiles } from "../audio/readAudioFiles.js?v=20260504-cycle3";
-import { SoniqMenuBar } from "../components/SoniqMenuBar.js?v=20260504-cycle3";
-import { SoniqTransportBar } from "../components/SoniqTransportBar.js?v=20260504-cycle3";
-import { SoniqWorkspace } from "../components/SoniqWorkspace.js?v=20260504-cycle3";
-import { SoniqStatusBar } from "../components/SoniqStatusBar.js?v=20260504-cycle3";
-import { formatFileSize } from "../utils/fileValidation.js?v=20260504-cycle3";
+} from "../audio/drawTimelineWaveform.js?v=20260504-cycle4";
+import { normalizeRange } from "../audio/timelineOperations.js?v=20260504-cycle4";
+import { encodeWav } from "../audio/encodeWav.js?v=20260504-cycle4";
+import { readAudioFiles } from "../audio/readAudioFiles.js?v=20260504-cycle4";
+import { SoniqMenuBar } from "../components/SoniqMenuBar.js?v=20260504-cycle4";
+import { SoniqTransportBar } from "../components/SoniqTransportBar.js?v=20260504-cycle4";
+import { SoniqWorkspace } from "../components/SoniqWorkspace.js?v=20260504-cycle4";
+import { SoniqStatusBar } from "../components/SoniqStatusBar.js?v=20260504-cycle4";
+import { formatFileSize } from "../utils/fileValidation.js?v=20260504-cycle4";
 
 /**
- * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle3").EditorTrack} EditorTrack
- * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle3").EditorClip} EditorClip
- * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle3").EditorSelection} EditorSelection
+ * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle4").EditorTrack} EditorTrack
+ * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle4").EditorClip} EditorClip
+ * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle4").EditorSelection} EditorSelection
  */
 
 /**
@@ -146,6 +147,7 @@ export function createApp(root) {
 
     // Edit actions (always shown, disabled when no selection)
     items.push({ action: "crop-selection", label: "Recortar", enabled: hasSelection });
+    items.push({ action: "fade-selection", label: "Fade in/out", enabled: hasSelection });
     items.push({ action: "copy-selection", label: "Copiar", enabled: hasSelection });
     items.push({ action: "delete-selection", label: "Eliminar", enabled: hasSelection });
     items.push({ separator: true });
@@ -376,6 +378,7 @@ export function createApp(root) {
     switch (target.dataset.action) {
       case "toggle-playback": togglePlayback(); break;
       case "crop-selection": void cropSelection(); break;
+      case "fade-selection": void fadeSelection(); break;
       case "copy-selection": void copySelection(); break;
       case "paste-clipboard": void pasteClipboard(); break;
       case "delete-selection": void deleteSelection(); break;
@@ -858,6 +861,27 @@ export function createApp(root) {
     pausePlayback({ renderAfter: false });
     state.infoMessage = "Recorte aplicado al clip seleccionado.";
     await runClipEdit(selection.clipId, (audioContext, clip) => cropClipRange(audioContext, clip, selection.startTime, selection.endTime));
+  }
+
+  async function fadeSelection() {
+    if (!hasValidSelection()) {
+      showError("Seleccioná un clip o rango de clip antes de aplicar fade.");
+      return;
+    }
+    const selection = state.selection;
+    if (selection.kind !== "clip" && selection.kind !== "clip-range") {
+      showError("Fade es destructivo: aplicalo sobre un clip o rango de clip.");
+      return;
+    }
+
+    pausePlayback({ renderAfter: false });
+    state.infoMessage = "Fade in/out aplicado.";
+    await runClipEdit(selection.clipId, (audioContext, clip) => {
+      if (selection.kind === "clip") {
+        return fadeClipRange(audioContext, clip, clip.startTime, clip.startTime + clip.duration);
+      }
+      return fadeClipRange(audioContext, clip, selection.startTime, selection.endTime);
+    });
   }
 
   async function deleteSelection() {

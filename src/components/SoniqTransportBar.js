@@ -53,7 +53,7 @@ export function SoniqTransportBar(props) {
       <div class="transport-group tool-cluster" aria-label="Herramientas de edición">
         <button class="tool-btn" type="button" data-action="cursor" title="Cursor (seleccionar)" aria-label="Cursor">cursor</button>
         <button class="tool-btn" type="button" data-action="crop-selection" ${props.hasSelection ? "" : "disabled"} title="Recortar selección" aria-label="Recortar">cortar</button>
-        <button class="tool-btn disabled" type="button" disabled title="Fade (no implementado)" aria-label="Fade">fade</button>
+        <button class="tool-btn" type="button" data-action="fade-selection" ${props.hasSelection ? "" : "disabled"} title="Aplicar fade in/out a la selección" aria-label="Fade">fade</button>
       </div>
 
       <div class="transport-divider" aria-hidden="true"></div>

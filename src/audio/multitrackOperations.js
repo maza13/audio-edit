@@ -351,6 +351,51 @@ export function cropClipRange(audioContext, clip, absoluteStart, absoluteEnd) {
 }
 
 /**
+ * Applies a simple destructive edge fade inside a clip or clip range.
+ *
+ * @param {AudioContext} audioContext
+ * @param {EditorClip} clip
+ * @param {number} absoluteStart
+ * @param {number} absoluteEnd
+ * @param {number} [fadeSeconds]
+ * @returns {EditorClip}
+ */
+export function fadeClipRange(audioContext, clip, absoluteStart, absoluteEnd, fadeSeconds = 0.15) {
+  const local = normalizeRange(
+    absoluteStart - clip.startTime,
+    absoluteEnd - clip.startTime,
+    clip.duration
+  );
+  const output = cloneAudioBuffer(audioContext, clip.buffer);
+  const startSample = Math.floor(local.start * output.sampleRate);
+  const endSample = Math.min(output.length, Math.ceil(local.end * output.sampleRate));
+  const frameCount = Math.max(0, endSample - startSample);
+  const fadeFrames = Math.max(1, Math.min(
+    Math.floor(fadeSeconds * output.sampleRate),
+    Math.floor(frameCount / 2)
+  ));
+
+  if (frameCount <= 1 || fadeFrames <= 0) return { ...clip, buffer: output };
+
+  for (let channel = 0; channel < output.numberOfChannels; channel += 1) {
+    const channelData = output.getChannelData(channel);
+    for (let frame = 0; frame < fadeFrames; frame += 1) {
+      const fadeInGain = frame / fadeFrames;
+      const fadeOutGain = (fadeFrames - frame) / fadeFrames;
+      channelData[startSample + frame] *= fadeInGain;
+      channelData[endSample - 1 - frame] *= fadeOutGain;
+    }
+  }
+
+  return {
+    ...clip,
+    buffer: output,
+    duration: output.duration,
+    sourceDuration: output.duration
+  };
+}
+
+/**
  * @param {AudioContext} audioContext
  * @param {EditorTrack[]} tracks
  * @param {EditorClip[]} clips
