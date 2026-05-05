@@ -1,6 +1,6 @@
-import { decodeAudioFile } from "../audio/decodeAudioFile.js?v=20260504-cycle5";
-import { decodeVideoFile } from "../audio/decodeVideoFile.js?v=20260504-cycle5";
-import { createAudioPreviewUrl } from "../audio/createAudioPreviewUrl.js?v=20260504-cycle5";
+import { decodeAudioFile } from "../audio/decodeAudioFile.js?v=20260504-cycle6b";
+import { decodeVideoFile } from "../audio/decodeVideoFile.js?v=20260504-cycle6b";
+import { createAudioPreviewUrl } from "../audio/createAudioPreviewUrl.js?v=20260504-cycle6b";
 import {
   copyAudioBufferRange,
   copyClipRange,
@@ -17,24 +17,24 @@ import {
   normalizeProjectStructure,
   renderProjectToBuffer,
   validateNoSameTrackOverlap
-} from "../audio/multitrackOperations.js?v=20260504-cycle5";
+} from "../audio/multitrackOperations.js?v=20260504-cycle6b";
 import {
   drawTimelineWaveform,
   getTimelinePointerInfo
-} from "../audio/drawTimelineWaveform.js?v=20260504-cycle5";
-import { normalizeRange } from "../audio/timelineOperations.js?v=20260504-cycle5";
-import { encodeWav } from "../audio/encodeWav.js?v=20260504-cycle5";
-import { readAudioFiles } from "../audio/readAudioFiles.js?v=20260504-cycle5";
-import { SoniqMenuBar } from "../components/SoniqMenuBar.js?v=20260504-cycle5";
-import { SoniqTransportBar } from "../components/SoniqTransportBar.js?v=20260504-cycle5";
-import { SoniqWorkspace } from "../components/SoniqWorkspace.js?v=20260504-cycle5";
-import { SoniqStatusBar } from "../components/SoniqStatusBar.js?v=20260504-cycle5";
-import { formatFileSize } from "../utils/fileValidation.js?v=20260504-cycle5";
+} from "../audio/drawTimelineWaveform.js?v=20260504-cycle6b";
+import { normalizeRange } from "../audio/timelineOperations.js?v=20260504-cycle6b";
+import { encodeWav } from "../audio/encodeWav.js?v=20260504-cycle6b";
+import { readAudioFiles } from "../audio/readAudioFiles.js?v=20260504-cycle6b";
+import { SoniqMenuBar } from "../components/SoniqMenuBar.js?v=20260504-cycle6b";
+import { SoniqTransportBar } from "../components/SoniqTransportBar.js?v=20260504-cycle6b";
+import { SoniqWorkspace } from "../components/SoniqWorkspace.js?v=20260504-cycle6b";
+import { SoniqStatusBar } from "../components/SoniqStatusBar.js?v=20260504-cycle6b";
+import { formatFileSize } from "../utils/fileValidation.js?v=20260504-cycle6b";
 
 /**
- * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle5").EditorTrack} EditorTrack
- * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle5").EditorClip} EditorClip
- * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle5").EditorSelection} EditorSelection
+ * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle6b").EditorTrack} EditorTrack
+ * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle6b").EditorClip} EditorClip
+ * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle6b").EditorSelection} EditorSelection
  */
 
 /**
@@ -356,6 +356,7 @@ export function createApp(root) {
 
     normalizationMode?.addEventListener("change", handleNormalizationChange);
     normalizationScope?.addEventListener("change", handleNormalizationChange);
+    window.onkeydown = handleKeyboardShortcut;
 
     zoomSlider?.addEventListener("input", (event) => {
       const input = /** @type {HTMLInputElement} */ (event.currentTarget);
@@ -399,6 +400,87 @@ export function createApp(root) {
       case "skip-forward": jumpToEnd(); break;
       case "open-command-menu": openCommandMenu(event); break;
       case "export-wav": void exportWav(); break;
+    }
+  }
+
+  function handleKeyboardShortcut(event) {
+    const target = /** @type {HTMLElement | null} */ (event.target);
+    const tagName = target?.tagName?.toLowerCase();
+    const isTypingTarget = target?.isContentEditable || tagName === "input" || tagName === "textarea" || tagName === "select";
+    if (isTypingTarget) return;
+
+    const key = event.key.toLowerCase();
+    const usesModifier = event.ctrlKey || event.metaKey;
+
+    if (event.key === "Escape") {
+      if (state.contextMenu.isOpen) closeContextMenu();
+      else if (state.selection) clearSelection();
+      return;
+    }
+
+    if (event.code === "Space" && hasAudio()) {
+      event.preventDefault();
+      togglePlayback();
+      return;
+    }
+
+    if ((event.key === "Delete" || event.key === "Backspace") && hasValidSelection()) {
+      event.preventDefault();
+      void deleteSelection();
+      return;
+    }
+
+    if (usesModifier && key === "c" && hasValidSelection()) {
+      event.preventDefault();
+      void copySelection();
+      return;
+    }
+
+    if (usesModifier && key === "v" && state.clipboardBuffer) {
+      event.preventDefault();
+      void pasteClipboard();
+      return;
+    }
+
+    if (event.key === "Home" && hasAudio()) {
+      event.preventDefault();
+      jumpToStart();
+      return;
+    }
+
+    if (event.key === "End" && hasAudio()) {
+      event.preventDefault();
+      jumpToEnd();
+      return;
+    }
+
+    if (event.key === "ArrowLeft" && hasAudio()) {
+      event.preventDefault();
+      jumpBySeconds(event.shiftKey ? -TRANSPORT_JUMP_SECONDS : -1);
+      return;
+    }
+
+    if (event.key === "ArrowRight" && hasAudio()) {
+      event.preventDefault();
+      jumpBySeconds(event.shiftKey ? TRANSPORT_JUMP_SECONDS : 1);
+      return;
+    }
+
+    if (usesModifier && (event.key === "+" || event.key === "=")) {
+      event.preventDefault();
+      setTimelineZoom(state.timelineZoom * TIMELINE_ZOOM_STEP, { anchor: "center" });
+      return;
+    }
+
+    if (usesModifier && event.key === "-") {
+      event.preventDefault();
+      setTimelineZoom(state.timelineZoom / TIMELINE_ZOOM_STEP, { anchor: "center" });
+      return;
+    }
+
+    if (usesModifier && event.key === "0") {
+      event.preventDefault();
+      setTimelineZoom(1, { anchor: "center" });
     }
   }
 

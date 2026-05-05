@@ -104,7 +104,7 @@ export function SoniqWorkspace(props) {
           <canvas
             class="timeline-canvas"
             data-testid="timeline-canvas"
-            tabindex="-1"
+            tabindex="0"
             aria-label="Waveform multipista"
           ></canvas>
           ${props.hasAudio ? "" : `
