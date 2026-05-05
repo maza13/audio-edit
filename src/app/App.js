@@ -1,6 +1,6 @@
-import { decodeAudioFile } from "../audio/decodeAudioFile.js?v=20260504-cycle2";
-import { decodeVideoFile } from "../audio/decodeVideoFile.js?v=20260504-cycle2";
-import { createAudioPreviewUrl } from "../audio/createAudioPreviewUrl.js?v=20260504-cycle2";
+import { decodeAudioFile } from "../audio/decodeAudioFile.js?v=20260504-cycle3";
+import { decodeVideoFile } from "../audio/decodeVideoFile.js?v=20260504-cycle3";
+import { createAudioPreviewUrl } from "../audio/createAudioPreviewUrl.js?v=20260504-cycle3";
 import {
   copyAudioBufferRange,
   copyClipRange,
@@ -16,24 +16,24 @@ import {
   normalizeProjectStructure,
   renderProjectToBuffer,
   validateNoSameTrackOverlap
-} from "../audio/multitrackOperations.js?v=20260504-cycle2";
+} from "../audio/multitrackOperations.js?v=20260504-cycle3";
 import {
   drawTimelineWaveform,
   getTimelinePointerInfo
-} from "../audio/drawTimelineWaveform.js?v=20260504-cycle2";
-import { normalizeRange } from "../audio/timelineOperations.js?v=20260504-cycle2";
-import { encodeWav } from "../audio/encodeWav.js?v=20260504-cycle2";
-import { readAudioFiles } from "../audio/readAudioFiles.js?v=20260504-cycle2";
-import { SoniqMenuBar } from "../components/SoniqMenuBar.js?v=20260504-cycle2";
-import { SoniqTransportBar } from "../components/SoniqTransportBar.js?v=20260504-cycle2";
-import { SoniqWorkspace } from "../components/SoniqWorkspace.js?v=20260504-cycle2";
-import { SoniqStatusBar } from "../components/SoniqStatusBar.js?v=20260504-cycle2";
-import { formatFileSize } from "../utils/fileValidation.js?v=20260504-cycle2";
+} from "../audio/drawTimelineWaveform.js?v=20260504-cycle3";
+import { normalizeRange } from "../audio/timelineOperations.js?v=20260504-cycle3";
+import { encodeWav } from "../audio/encodeWav.js?v=20260504-cycle3";
+import { readAudioFiles } from "../audio/readAudioFiles.js?v=20260504-cycle3";
+import { SoniqMenuBar } from "../components/SoniqMenuBar.js?v=20260504-cycle3";
+import { SoniqTransportBar } from "../components/SoniqTransportBar.js?v=20260504-cycle3";
+import { SoniqWorkspace } from "../components/SoniqWorkspace.js?v=20260504-cycle3";
+import { SoniqStatusBar } from "../components/SoniqStatusBar.js?v=20260504-cycle3";
+import { formatFileSize } from "../utils/fileValidation.js?v=20260504-cycle3";
 
 /**
- * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle2").EditorTrack} EditorTrack
- * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle2").EditorClip} EditorClip
- * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle2").EditorSelection} EditorSelection
+ * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle3").EditorTrack} EditorTrack
+ * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle3").EditorClip} EditorClip
+ * @typedef {import("../audio/multitrackOperations.js?v=20260504-cycle3").EditorSelection} EditorSelection
  */
 
 /**
@@ -172,6 +172,7 @@ export function createApp(root) {
   }
 
   function renderContextMenu() {
+    document.getElementById("ctx-layer")?.remove();
     const items = computeMenuItems();
     let html = `<div class="context-menu-layer" id="ctx-layer"><nav class="context-menu" role="menu" style="left:${state.contextMenu.x}px;top:${state.contextMenu.y}px">`;
 
@@ -226,6 +227,21 @@ export function createApp(root) {
     const x = event.clientX;
     const y = event.clientY;
     state.contextMenu = { isOpen: true, x, y };
+    renderContextMenu();
+
+    document.addEventListener("pointerdown", handleOutsideClick);
+    document.addEventListener("keydown", handleMenuKeydown);
+  }
+
+  function openCommandMenu(event) {
+    const target = /** @type {HTMLElement} */ (event.currentTarget);
+    const rect = target.getBoundingClientRect();
+    event.preventDefault();
+    state.contextMenu = {
+      isOpen: true,
+      x: rect.left,
+      y: rect.bottom + 6
+    };
     renderContextMenu();
 
     document.addEventListener("pointerdown", handleOutsideClick);
@@ -378,6 +394,7 @@ export function createApp(root) {
       case "rewind": jumpBySeconds(-TRANSPORT_JUMP_SECONDS); break;
       case "forward": jumpBySeconds(TRANSPORT_JUMP_SECONDS); break;
       case "skip-forward": jumpToEnd(); break;
+      case "open-command-menu": openCommandMenu(event); break;
       case "export-wav": void exportWav(); break;
     }
   }

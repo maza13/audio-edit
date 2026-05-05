@@ -37,9 +37,9 @@ export function SoniqMenuBar(props) {
             ${props.isBusy ? "disabled" : ""}
           />
         </label>
-        <span class="menu-item" role="button" tabindex="0" aria-label="Menú editar">edit</span>
-        <span class="menu-item" role="button" tabindex="0" aria-label="Menú pista">track</span>
-        <span class="menu-item" role="button" tabindex="0" aria-label="Menú clip">clip</span>
+        <button class="menu-item" type="button" data-action="open-command-menu" data-menu-kind="edit" aria-label="Menú editar">edit</button>
+        <button class="menu-item" type="button" data-action="open-command-menu" data-menu-kind="track" aria-label="Menú pista">track</button>
+        <button class="menu-item" type="button" data-action="open-command-menu" data-menu-kind="clip" aria-label="Menú clip">clip</button>
         <span class="menu-item disabled" aria-disabled="true" title="No implementado">effects</span>
         <div class="menu-item-group">
           <button class="menu-item-btn" type="button" data-action="export-wav" ${props.hasAudio ? "" : "disabled"}>render</button>
